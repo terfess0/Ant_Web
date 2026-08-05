@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>AntMaze - Jugador</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ version }}">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        .login-card {
+            background: var(--panel-bg);
+            padding: 24px 20px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            max-width: 320px;
+            margin: 30px auto;
+        }
+        .arcade-input {
+            font-family: monospace;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-align: center;
+            background: #f5efe6;
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 12px;
+            border-radius: 6px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 14px;
+        }
+        #game-view {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        #info-banner {
+            background: var(--panel-bg);
+            padding: 6px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            width: 100%;
+            max-width: 340px;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-color);
+        }
+        #playerCanvas {
+            background-color: #e6cead;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            touch-action: none;
+        }
+        .joystick-container {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .joystick-zone {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            touch-action: none;
+            background: rgba(121, 85, 72, 0.15);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+        .joystick-thumb {
+            width: 55px;
+            height: 55px;
+            background: var(--accent);
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            pointer-events: none;
+            transition: transform 0.05s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <header class="top-bar">
+        <h1>🐜 AntMaze</h1>
+    </header>
+
+    <div class="main-container">
+        <!-- Vista de Conexión -->
+        <div id="login-view" class="login-card">
+            <h2 style="margin-top:0; font-size:1.4rem;">AntMaze</h2>
+            <label style="font-weight:bold; display:block; text-align:left; margin-bottom: 6px; font-size:0.9rem;">Nickname (3 Letras):</label>
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+                <input type="text" id="alias" class="arcade-input" placeholder="AAA" maxlength="3">
+                <button type="button" id="btn-random-name" style="padding:10px 14px; background:var(--card-bg); border:2px solid var(--border-color); border-radius:6px; cursor:pointer;" title="Generar nuevo nickname">🎲</button>
+            </div>
+            <select id="spawn_pref" style="display:none;"><option value="AUTO">AUTO</option></select>
+            <button id="btn-connect" class="btn-submit">Jugar</button>
+        </div>
+
+        <!-- Vista de Juego -->
+        <div id="game-view">
+            <div id="info-banner">
+                <span id="score-text">Score: 0</span>
+                <button id="btn-change-spawn" style="background:var(--accent); color:#fff; border:none; border-radius:4px; padding:3px 8px; font-size:0.75rem; cursor:pointer; font-weight:bold;">Salir</button>
+            </div>
+
+            <canvas id="playerCanvas" width="340" height="340"></canvas>
+
+            <!-- Joystick Táctil Virtual 360° -->
+            <div class="joystick-container">
+                <div id="joystick-zone" class="joystick-zone">
+                    <div id="joystick-thumb" class="joystick-thumb"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/player.js') }}?v={{ version }}"></script>
+</body>
+</html>
