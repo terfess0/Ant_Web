@@ -8,6 +8,7 @@ import sys
 class TelemetryController(threading.Thread):
     def __init__(self, websocket_controller, get_salas_activas_func):
         super().__init__(name="Telemetry_Thread")
+        self.daemon = True
         self.ws_controller = websocket_controller
         self.get_salas_activas_func = get_salas_activas_func
         self.running = True
@@ -45,10 +46,7 @@ class TelemetryController(threading.Thread):
                     "ws_clients": ws_clients
                 }
                 
-                # Imprimir en consola constantemente para monitoreo
-                print(f"Telemetria - CPU: {cpu:.1f}% | RAM: {ram_mb}MB | Hilos: {hilos_activos} | WS Clientes: {ws_clients}")
-                
-                # Broadcast vía Websocket
+                # Broadcast vía Websocket (pantalla /admin)
                 if self.ws_controller and self.ws_controller.loop:
                     asyncio.run_coroutine_threadsafe(
                         self.ws_controller.broadcast(json.dumps(telemetria_data)), 
