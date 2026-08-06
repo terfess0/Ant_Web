@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Actualización de Ranking
     const rankingBody = document.getElementById('ranking-body');
     function actualizarRanking(rankingData) {
+        if (!rankingData) return;
         let html = '';
         rankingData.forEach(r => {
             html += `<tr>
@@ -91,7 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${r.dulces}</td>
             </tr>`;
         });
-        rankingBody.innerHTML = html;
+        if (rankingBody) {
+            rankingBody.innerHTML = html;
+        }
     }
 
     // Lógica Global Ranking
@@ -116,7 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderGlobalRanking(data) {
-        const filter = searchInput.value.toLowerCase();
+        if (!data) return;
+        const filter = searchInput ? searchInput.value.toLowerCase() : '';
         const filtered = data.filter(r => r.username.toLowerCase().includes(filter));
         
         const podiumEl = document.getElementById('ranking-podium');
@@ -137,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const r3 = filtered[2];
             podiumHtml += `<div class="podium-box rank-3"><h3>${r3.username}</h3><p>${r3.puntos} pts | 🍬 ${r3.dulces}</p><span style="font-size: 0.7rem; color: #6b7280; margin-top: 5px;">${r3.ultima_sala || 'Sin sala'}</span></div>`;
         }
-        podiumEl.innerHTML = podiumHtml;
+        if (podiumEl) podiumEl.innerHTML = podiumHtml;
         
         // Render Tabla (4 en adelante del filtrado)
         let tableHtml = '';
@@ -152,10 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${r.dulces}</td>
             </tr>`;
         }
-        tableBody.innerHTML = tableHtml;
+        if (tableBody) tableBody.innerHTML = tableHtml;
     }
-
-    let connectionLostAlerted = false;
 
     // WebSocket Logic
     function conectarWS() {
@@ -226,8 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (canvasView && currentIdSala === data.id_sala) {
                     canvasView.actualizarEstado(data);
                     actualizarRanking(data.ranking);
-                    if (data.tiempo_restante) {
-                        document.getElementById('game-timer').innerText = data.tiempo_restante;
+                    const timerEl = document.getElementById('game-timer');
+                    if (timerEl && data.tiempo_restante) {
+                        timerEl.innerText = data.tiempo_restante;
                     }
                 }
             }
