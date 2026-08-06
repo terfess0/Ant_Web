@@ -36,12 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    
-    let currentIdJugador = null;
-    let currentIdSala = null;
-    let username = '';
-    
-    let globalRankingData = [];
+
 
 
 
