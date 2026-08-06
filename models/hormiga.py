@@ -130,7 +130,8 @@ class Hormiga(threading.Thread):
             "y": round(self.y, 2),
             "base_x": self.base_x,
             "base_y": self.base_y,
-            "estado": self.estado
+            "estado": self.estado,
+            "lleva_dulce": getattr(self, "lleva_dulce", False)
         }
         if self.es_guardiana:
             d["estado_guardiana"] = self.estado_guardiana

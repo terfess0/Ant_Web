@@ -1,3 +1,75 @@
+class SoundFX {
+    constructor() {
+        this.audioCtx = null;
+    }
+
+    init() {
+        if (!this.audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                this.audioCtx = new AudioContext();
+            }
+        }
+        if (this.audioCtx && this.audioCtx.state === 'suspended') {
+            this.audioCtx.resume();
+        }
+    }
+
+    playKick() {
+        this.init();
+        if (!this.audioCtx) return;
+        try {
+            const osc = this.audioCtx.createOscillator();
+            const gain = this.audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(200, this.audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, this.audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.3, this.audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(this.audioCtx.destination);
+            osc.start();
+            osc.stop(this.audioCtx.currentTime + 0.3);
+        } catch (e) {}
+    }
+
+    playNewSweet() {
+        this.init();
+        if (!this.audioCtx) return;
+        try {
+            const osc = this.audioCtx.createOscillator();
+            const gain = this.audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, this.audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(659.25, this.audioCtx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.2, this.audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 0.15);
+            osc.connect(gain);
+            gain.connect(this.audioCtx.destination);
+            osc.start();
+            osc.stop(this.audioCtx.currentTime + 0.15);
+        } catch (e) {}
+    }
+
+    playGainSweet() {
+        this.init();
+        if (!this.audioCtx) return;
+        try {
+            const osc = this.audioCtx.createOscillator();
+            const gain = this.audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(440, this.audioCtx.currentTime);
+            osc.frequency.setValueAtTime(880, this.audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.25, this.audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 0.2);
+            osc.connect(gain);
+            gain.connect(this.audioCtx.destination);
+            osc.start();
+            osc.stop(this.audioCtx.currentTime + 0.2);
+        } catch (e) {}
+    }
+}
+
 class CanvasView {
     constructor(canvasId, onClickCallback) {
         this.canvas = document.getElementById(canvasId);
@@ -10,6 +82,10 @@ class CanvasView {
             hormigas: [],
             dulces: []
         };
+
+        this.soundFX = new SoundFX();
+        this.prevDulcesCount = 0;
+        this.kickedAntIds = new Set();
 
         // Cargar sprites
         this.sprites = {
@@ -41,6 +117,7 @@ class CanvasView {
 
         // Event listener de clics
         this.canvas.addEventListener('mousedown', (e) => {
+            this.soundFX.init();
             const rect = this.canvas.getBoundingClientRect();
             // Calcular escala real vs tamaño CSS
             const scaleX = this.canvas.width / rect.width;
@@ -58,9 +135,29 @@ class CanvasView {
     }
 
     actualizarEstado(nuevoEstado) {
-        this.estado.dulces = nuevoEstado.dulces || [];
+        const nuevosDulces = nuevoEstado.dulces || [];
+        if (nuevosDulces.length > this.prevDulcesCount) {
+            this.soundFX.playNewSweet();
+        }
+        this.prevDulcesCount = nuevosDulces.length;
+
+        this.estado.dulces = nuevosDulces;
         this.estado.hormigas = nuevoEstado.hormigas || [];
         this.estado.ranking = nuevoEstado.ranking || [];
+
+        // Detectar si alguna hormiga pasó a expulsada para reproducir el sonido de patada
+        this.estado.hormigas.forEach(h => {
+            if (h.estado === 'expulsada') {
+                const key = `${h.id_jugador}_${h.id}`;
+                if (!this.kickedAntIds.has(key)) {
+                    this.kickedAntIds.add(key);
+                    this.soundFX.playKick();
+                }
+            } else {
+                const key = `${h.id_jugador}_${h.id}`;
+                this.kickedAntIds.delete(key);
+            }
+        });
     }
 
     dibujarSprite(img, x, y, size, fallbackColor) {
@@ -104,10 +201,11 @@ class CanvasView {
                 // Mostrar dulces y procesar floating texts
                 const player = this.estado.ranking && this.estado.ranking.find(r => r.id_jugador === h.id_jugador);
                 if (player) {
-                    const prevCount = this.prevSweets[h.id_jugador] || 0;
+                    const prevCount = this.prevSweets[h.id_jugador] !== undefined ? this.prevSweets[h.id_jugador] : player.dulces;
 
                     if (player.dulces > prevCount) {
                         this.floatingTexts.push({ text: '+1', x: bx, y: by - 10, alpha: 1.0, color: '74, 222, 128' });
+                        this.soundFX.playGainSweet();
                     } else if (player.dulces < prevCount) {
                         this.floatingTexts.push({ text: '-1', x: bx, y: by - 10, alpha: 1.0, color: '239, 68, 68' });
                     }
@@ -138,16 +236,23 @@ class CanvasView {
                 const offset = (h.id_hormiga || 0) * 100;
                 const walkCycle = Math.floor((Date.now() + offset) / 150) % 2;
                 const antImg = walkCycle === 0 ? this.sprites.hormiga : this.sprites.hormiga2;
-                this.dibujarSprite(antImg, h.x, h.y, 35, color);
+                this.dibujarSprite(antImg, h.x, h.y, 90, color);
+
+                // DIBUJAR DULCE SOBRE LA HORMIGA SI LLEVA DULCE O ESTÁ REGRESANDO CON ÉL
+                if (h.lleva_dulce || h.estado === 'retorno') {
+                    const dulceSprite = (h.id % 3 === 0) ? this.sprites.dulce : (h.id % 3 === 1 ? this.sprites.dulce1 : this.sprites.dulce2);
+                    // Dibujar con ligero desfase por encima de la hormiga
+                    this.dibujarSprite(dulceSprite, h.x + 10, h.y - 20, 45, '#FCA5A5');
+                }
 
                 if (h.estado === 'expulsada') {
                     // Texto flotante dinámico de patada sobre la hormiga que va saliendo volando
                     this.ctx.fillStyle = '#ef4444';
-                    this.ctx.font = 'bold 13px Inter, sans-serif';
+                    this.ctx.font = 'bold 15px Inter, sans-serif';
                     this.ctx.textAlign = 'center';
                     this.ctx.shadowColor = 'black';
                     this.ctx.shadowBlur = 4;
-                    this.ctx.fillText('PATADA', h.x, h.y - 25);
+                    this.ctx.fillText('PATADA', h.x, h.y - 30);
                     this.ctx.shadowBlur = 0;
                 }
             }
