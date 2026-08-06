@@ -96,3 +96,24 @@ class Database:
         finally:
             cursor.close()
             conn.close()
+
+    @classmethod
+    def obtener_salas_db(cls):
+        conn = cls.get_connection()
+        if not conn: return []
+        try:
+            cursor = conn.cursor(dictionary=True)
+            query = """
+                SELECT s.id_sala, s.nombre_sala, es.descripcion as estado
+                FROM salas s
+                JOIN estado_sala es ON s.id_estado_sala = es.id_estado_sala
+            """
+            cursor.execute(query)
+            return cursor.fetchall()
+        except mysql.connector.Error as err:
+            print(f"Error al obtener salas de la BD: {err}")
+            return []
+        finally:
+            if 'cursor' in locals():
+                cursor.close()
+            conn.close()

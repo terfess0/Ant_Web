@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (target === 'view-ranking' && ws && ws.readyState === WebSocket.OPEN) {
                 ws.send(JSON.stringify({ accion: "obtener_ranking_global" }));
+            } else if (target === 'lobbies-view' && ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ accion: "obtener_salas" }));
             }
         });
     });
@@ -71,23 +73,26 @@ document.addEventListener('DOMContentLoaded', () => {
         conectarWS();
     });
 
-    // Entrar a sala
-    const joinBtns = document.querySelectorAll('.btn-join');
-    joinBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            currentIdSala = parseInt(btn.getAttribute('data-sala'));
-            const roomName = btn.previousElementSibling.previousElementSibling.innerText;
-            document.getElementById('game-room-name').innerText = roomName;
-            
-            if(ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify({
-                    accion: "unirse_sala",
-                    username: username,
-                    id_sala: currentIdSala
-                }));
+    // Entrar a sala dinámico
+    const lobbiesGridContainer = document.getElementById('lobbies-grid-container');
+    if (lobbiesGridContainer) {
+        lobbiesGridContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-join')) {
+                const btn = e.target;
+                currentIdSala = parseInt(btn.getAttribute('data-sala'));
+                const roomName = btn.previousElementSibling.previousElementSibling.innerText;
+                document.getElementById('game-room-name').innerText = roomName;
+                
+                if(ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({
+                        accion: "unirse_sala",
+                        username: username,
+                        id_sala: currentIdSala
+                    }));
+                }
             }
         });
-    });
+    }
 
     // Actualización de Ranking
     const rankingBody = document.getElementById('ranking-body');
@@ -179,6 +184,38 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (data.evento === "telemetria") {
                 telemetryView.actualizar(data);
             } 
+            else if (data.evento === "lista_salas") {
+                const container = document.getElementById('lobbies-grid-container');
+                if (container) {
+                    let html = '';
+                    const bgs = ['bg-alpha', 'bg-beta', 'bg-gamma'];
+                    data.salas.forEach((sala, index) => {
+                        const bgClass = bgs[index % bgs.length];
+                        const count = sala.cantidad_jugadores;
+                        const full = count >= 5;
+                        const inGame = sala.estado === 'En Juego' || sala.estado === 'Cerrada';
+                        const disabled = full || inGame;
+                        
+                        let btnText = "Unirse a Sala";
+                        if (inGame) btnText = "Cerrada";
+                        else if (full) btnText = "Sala Llena";
+                        
+                        let usersTitle = sala.jugadores && sala.jugadores.length > 0 ? "Jugadores: " + sala.jugadores.join(", ") : "Sin jugadores";
+
+                        html += `<div class="lobby-card">
+                            <div class="lobby-image ${bgClass}">
+                                <span class="badge" title="${usersTitle}">👥 ${count}/5</span>
+                            </div>
+                            <div class="lobby-info">
+                                <h3>${sala.nombre_sala}</h3>
+                                <span class="tag">Estado: ${sala.estado}</span>
+                                <button class="btn-brown btn-join" data-sala="${sala.id_sala}" ${disabled ? 'disabled' : ''}>${btnText}</button>
+                            </div>
+                        </div>`;
+                    });
+                    container.innerHTML = html;
+                }
+            }
             else if (data.evento === "estado_sala") {
                 if (canvasView && currentIdSala === data.id_sala) {
                     canvasView.actualizarEstado(data);

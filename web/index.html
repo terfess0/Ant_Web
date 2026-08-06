@@ -36,17 +36,17 @@
             </div>
             <nav class="sidebar-nav">
                 <a href="#" class="nav-item active" data-target="telemetry-view">
-                    <span class="icon">⊞</span> Dashboard
+                    Dashboard
                 </a>
                 <a href="#" class="nav-item" data-target="view-ranking">
-                    <span class="icon">🏆</span> Ranking
+                    Ranking
                 </a>
                 <a href="#" class="nav-item" data-target="lobbies-view">
-                    <span class="icon">≡</span> Salas
+                    Salas
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <p>📥 Votar por este proyecto</p>
+                <p>Votar por este proyecto</p>
                 <div class="qr-code">
                     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZCIvPjwvc3ZnPg==" alt="QR Code">
                 </div>
@@ -65,40 +65,8 @@
                     </div>
                     <button class="btn-outline">↻ Refresh</button>
                 </header>
-                <div class="lobbies-grid">
-                    <!-- Sala 1 -->
-                    <div class="lobby-card">
-                        <div class="lobby-image bg-alpha">
-                            <span class="badge">👥 0/5</span>
-                        </div>
-                        <div class="lobby-info">
-                            <h3>Hormiguero Alfa</h3>
-                            <span class="tag">Map: Surface</span>
-                            <button class="btn-brown btn-join" data-sala="1">Unirse a Sala</button>
-                        </div>
-                    </div>
-                    <!-- Sala 2 -->
-                    <div class="lobby-card">
-                        <div class="lobby-image bg-beta">
-                            <span class="badge">👥 0/5</span>
-                        </div>
-                        <div class="lobby-info">
-                            <h3>Sector Beta-9</h3>
-                            <span class="tag">Map: Surface</span>
-                            <button class="btn-brown btn-join" data-sala="2">Unirse a Sala</button>
-                        </div>
-                    </div>
-                    <!-- Sala 3 -->
-                    <div class="lobby-card">
-                        <div class="lobby-image bg-gamma">
-                            <span class="badge">👥 0/5</span>
-                        </div>
-                        <div class="lobby-info">
-                            <h3>Nido Colmena</h3>
-                            <span class="tag">Map: Surface</span>
-                            <button class="btn-brown btn-join" data-sala="3">Unirse a Sala</button>
-                        </div>
-                    </div>
+                <div class="lobbies-grid" id="lobbies-grid-container">
+                    <!-- Salas generadas dinámicamente desde WS -->
                 </div>
             </div>
 

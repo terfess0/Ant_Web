@@ -12,6 +12,7 @@ class WebsocketController:
         self.get_sala_por_id = get_sala_por_id_func
         self.clientes = set()
         self.loop = None
+        self.get_todas_salas = None
 
     async def register(self, websocket):
         self.clientes.add(websocket)
@@ -51,6 +52,41 @@ class WebsocketController:
                     await websocket.send(json.dumps({
                         "evento": "ranking_global",
                         "ranking": ranking
+                    }))
+                    continue
+                
+                if accion == "obtener_salas":
+                    salas_db = Database.obtener_salas_db()
+                    salas_info = []
+                    salas_activas = self.get_todas_salas() if self.get_todas_salas else []
+                    salas_activas_dict = {s.id_sala: s for s in salas_activas}
+
+                    for s_db in salas_db:
+                        sala_memoria = salas_activas_dict.get(s_db['id_sala'])
+                        jugadores_nombres = []
+                        estado_actual = s_db['estado']
+                        
+                        if sala_memoria:
+                            jugadores_nombres = [j.username for j in sala_memoria.jugadores.values()]
+                            if sala_memoria.estado == 'esperando': estado_actual = 'En Espera'
+                            elif sala_memoria.estado == 'en_juego': estado_actual = 'En Juego'
+                            elif sala_memoria.estado == 'finalizada': estado_actual = 'Cerrada'
+                        else:
+                            if estado_actual.lower() == 'esperando': estado_actual = 'En Espera'
+                            elif estado_actual.lower() == 'en_juego': estado_actual = 'En Juego'
+                            elif estado_actual.lower() == 'finalizada': estado_actual = 'Cerrada'
+                                
+                        salas_info.append({
+                            'id_sala': s_db['id_sala'],
+                            'nombre_sala': s_db['nombre_sala'],
+                            'estado': estado_actual,
+                            'cantidad_jugadores': len(jugadores_nombres),
+                            'jugadores': jugadores_nombres
+                        })
+                        
+                    await websocket.send(json.dumps({
+                        "evento": "lista_salas",
+                        "salas": salas_info
                     }))
                     continue
                 
@@ -114,6 +150,7 @@ class WebsocketController:
 
     async def start_server(self, get_salas_activas_func):
         self.loop = asyncio.get_running_loop()
+        self.get_todas_salas = get_salas_activas_func
         
         asyncio.create_task(self.game_loop_task(get_salas_activas_func))
         
