@@ -13,6 +13,10 @@ from controllers.websocket_controller import WebsocketController
 salas_activas = {}
 
 def get_sala_por_id(id_sala):
+    if id_sala not in salas_activas:
+        sala = Sala(id_sala)
+        sala.iniciar_partida()
+        salas_activas[id_sala] = sala
     return salas_activas.get(id_sala)
 
 def get_todas_salas():
@@ -32,7 +36,6 @@ async def main():
     
     # 3. (OPCIONAL/TEST) Crear una sala inicial para comprobar métricas
     sala_test = Sala(id_sala=1)
-    sala_test.iniciar_partida()
     salas_activas[1] = sala_test
     
     # 4. Inicializar WebSocket Controller

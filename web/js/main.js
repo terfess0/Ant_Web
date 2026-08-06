@@ -94,6 +94,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Botón Abandonar Sala
+    const btnLeaveRoom = document.getElementById('btn-leave-room');
+    if (btnLeaveRoom) {
+        btnLeaveRoom.addEventListener('click', () => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    accion: "salir_sala",
+                    id_sala: currentIdSala,
+                    id_jugador: currentIdJugador
+                }));
+            }
+            currentIdSala = null;
+            Object.values(views).forEach(v => v.classList.add('hidden'));
+            views['lobbies-view'].classList.remove('hidden');
+            
+            navItems.forEach(n => n.classList.remove('active'));
+            const navSalas = Array.from(navItems).find(n => n.getAttribute('data-target') === 'lobbies-view');
+            if (navSalas) navSalas.classList.add('active');
+            
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ accion: "obtener_salas" }));
+            }
+        });
+    }
+
     // Actualización de Ranking
     const rankingBody = document.getElementById('ranking-body');
     function actualizarRanking(rankingData) {
@@ -163,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (data.evento === "unirse_sala_ok") {
                 currentIdJugador = data.id_jugador;
+                window.currentIdJugador = currentIdJugador; // Exposed for canvas_view
                 Object.values(views).forEach(v => v.classList.add('hidden'));
                 views['game-view'].classList.remove('hidden');
                 
@@ -211,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         let usersTitle = sala.jugadores && sala.jugadores.length > 0 ? "Jugadores: " + sala.jugadores.join(", ") : "Sin jugadores";
 
                         html += `<div class="lobby-card">
-                            <div class="lobby-image ${bgClass}">
+                            <div class="lobby-image" style="background-image: url('assets/fondo.png'); background-size: cover; background-position: center; position: relative;">
                                 <span class="badge" title="${usersTitle}">👥 ${count}/5</span>
                             </div>
                             <div class="lobby-info">
@@ -224,10 +250,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     container.innerHTML = html;
                 }
             }
+            else if (data.evento === "fin_partida") {
+                if (currentIdSala === data.id_sala) {
+                    alert("¡Partida Finalizada!\nGanador: " + data.ganador + " con " + data.puntos + " puntos.");
+                    currentIdSala = null;
+                    Object.values(views).forEach(v => v.classList.add('hidden'));
+                    views['lobbies-view'].classList.remove('hidden');
+                    
+                    navItems.forEach(n => n.classList.remove('active'));
+                    const navSalas = Array.from(navItems).find(n => n.getAttribute('data-target') === 'lobbies-view');
+                    if (navSalas) navSalas.classList.add('active');
+                    
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.send(JSON.stringify({ accion: "obtener_salas" }));
+                    }
+                }
+            }
             else if (data.evento === "estado_sala") {
                 if (canvasView && currentIdSala === data.id_sala) {
                     canvasView.actualizarEstado(data);
                     actualizarRanking(data.ranking);
+                    if (data.tiempo_restante) {
+                        document.getElementById('game-timer').innerText = data.tiempo_restante;
+                    }
                 }
             }
             else if (data.evento === "notificacion") {

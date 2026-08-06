@@ -172,3 +172,40 @@ class Database:
             if 'cursor' in locals():
                 cursor.close()
             conn.close()
+
+    @classmethod
+    def registrar_fin_partida(cls, id_sala, resultados):
+        conn = cls.get_connection()
+        if not conn: return
+        try:
+            cursor = conn.cursor()
+            
+            # 1. Insertar en partidas
+            cursor.execute(
+                "INSERT INTO partidas (id_sala, fecha_fin) VALUES (%s, NOW())", 
+                (id_sala,)
+            )
+            id_partida = cursor.lastrowid
+            
+            # 2. Insertar cada participación y actualizar estadísticas
+            for r in resultados:
+                cursor.execute("""
+                    INSERT INTO participaciones_partida 
+                    (id_partida, id_jugador, puntos_partida, dulces_obtenidos, posicion_final)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (id_partida, r['id_jugador'], r['puntos'], r['dulces'], r['posicion']))
+                
+                cursor.execute("""
+                    UPDATE estadisticas_jugador 
+                    SET partidas_jugadas = partidas_jugadas + 1,
+                        partidas_ganadas = partidas_ganadas + %s
+                    WHERE id_jugador = %s
+                """, (1 if r['es_ganador'] else 0, r['id_jugador']))
+                
+            conn.commit()
+        except mysql.connector.Error as err:
+            print(f"Error al registrar fin de partida: {err}")
+        finally:
+            if 'cursor' in locals():
+                cursor.close()
+            conn.close()

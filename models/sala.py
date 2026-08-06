@@ -11,6 +11,7 @@ class Sala:
         self.jugadores = {} # dict id_jugador -> objeto Jugador
         self.dulces_centro = [] # lista de dicts {'id': int, 'x': float, 'y': float}
         self._contador_dulces = 0
+        self.tiempo_restante = 300.0 # 5 minutos en segundos
         
     def agregar_jugador(self, jugador):
         if len(self.jugadores) >= config.MAX_JUGADORES_SALA:
@@ -61,6 +62,63 @@ class Sala:
         for jugador in self.jugadores.values():
             for h in jugador.hormigas:
                 h.stop()
+
+    def tick(self):
+        if self.estado != "en_juego":
+            return False, None
+            
+        self.tiempo_restante -= 0.1
+        if self.tiempo_restante <= 0:
+            self.tiempo_restante = 0
+            ganador_info = self.finalizar_partida()
+            return True, ganador_info
+        return False, None
+
+    def get_tiempo_formateado(self):
+        minutos = int(self.tiempo_restante) // 60
+        segundos = int(self.tiempo_restante) % 60
+        return f"{minutos:02d}:{segundos:02d}"
+
+    def finalizar_partida(self):
+        # No cambiamos el estado a finalizada ni detenemos las hormigas, 
+        # para que la sala sea continua.
+        
+        ganador_username = "Nadie"
+        ganador_puntos = 0
+        
+        # Declarar ganador y guardar si hay jugadores
+        if self.jugadores:
+            lista_jugadores = list(self.jugadores.values())
+            lista_jugadores.sort(key=lambda j: (j.puntos, j.dulces), reverse=True)
+            ganador = lista_jugadores[0]
+            ganador_username = ganador.username
+            ganador_puntos = ganador.puntos
+            
+            # Guardar resultados en base de datos
+            resultados = []
+            for index, j in enumerate(lista_jugadores):
+                resultados.append({
+                    'id_jugador': j.id_jugador,
+                    'puntos': j.puntos,
+                    'dulces': j.dulces,
+                    'es_ganador': (j.id_jugador == ganador.id_jugador),
+                    'posicion': index + 1
+                })
+                
+            Database.registrar_fin_partida(self.id_sala, resultados)
+            
+            # Resetear puntuaciones de la sala para la siguiente ronda
+            for j in self.jugadores.values():
+                j.puntos = 0
+                j.dulces = 0
+                
+        # Resetear el entorno para que la partida continúe
+        self.tiempo_restante = 300.0
+        self.dulces_centro = []
+        for _ in range(3):
+            self._generar_dulce()
+        
+        return {"username": ganador_username, "puntos": ganador_puntos}
 
     def get_estado_global(self):
         todas_hormigas = []

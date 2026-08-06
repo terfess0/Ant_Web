@@ -8,11 +8,29 @@ class Hormiga(threading.Thread):
         super().__init__(name=f"Hormiga_{id_jugador}_{id_hormiga}")
         self.id_hormiga = id_hormiga
         self.id_jugador = id_jugador
-        self.x = start_x
-        self.y = start_y
         self.base_x = start_x
         self.base_y = start_y
         
+        # Posición inicial desfasada para no empezar amontonadas en el centro
+        if id_hormiga == 0:  # guardiana
+            self.x = start_x
+            self.y = start_y - 45  # "más elevación" sobre el hormiguero
+        elif id_hormiga == 1:
+            self.x = start_x - 70
+            self.y = start_y - 70
+        elif id_hormiga == 2:
+            self.x = start_x + 70
+            self.y = start_y - 70
+        elif id_hormiga == 3:
+            self.x = start_x - 70
+            self.y = start_y + 70
+        elif id_hormiga == 4:
+            self.x = start_x + 70
+            self.y = start_y + 70
+        else:
+            self.x = start_x
+            self.y = start_y
+            
         self.objetivo_x = None
         self.objetivo_y = None
         
@@ -104,6 +122,8 @@ class Hormiga(threading.Thread):
             "id_jugador": self.id_jugador,
             "x": round(self.x, 2),
             "y": round(self.y, 2),
+            "base_x": self.base_x,
+            "base_y": self.base_y,
             "estado": self.estado
         }
         if self.es_guardiana:
