@@ -109,11 +109,14 @@ class WebsocketController:
                         
                     if id_jugador not in sala.jugadores:
                         j = Jugador(id_jugador, username, random.randint(100, 700), random.randint(100, 500))
-                        if sala.agregar_jugador(j) and sala.estado == "en_juego":
-                            for i in range(5):
-                                h = Hormiga(id_hormiga=i, id_jugador=id_jugador, start_x=j.base_x, start_y=j.base_y)
-                                j.hormigas.append(h)
-                                h.start()
+                        if sala.agregar_jugador(j):
+                            nombre_sala = Database.obtener_nombre_sala(id_sala)
+                            print(f"{username} conectado a sala {nombre_sala}.")
+                            if sala.estado == "en_juego":
+                                for i in range(5):
+                                    h = Hormiga(id_hormiga=i, id_jugador=id_jugador, start_x=j.base_x, start_y=j.base_y)
+                                    j.hormigas.append(h)
+                                    h.start()
                                 
                     await websocket.send(json.dumps({
                         "evento": "unirse_sala_ok",

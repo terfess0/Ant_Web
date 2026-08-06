@@ -134,3 +134,21 @@ class Database:
             if 'cursor' in locals():
                 cursor.close()
             conn.close()
+
+    @classmethod
+    def obtener_nombre_sala(cls, id_sala):
+        conn = cls.get_connection()
+        if not conn: return f"Sala {id_sala}"
+        try:
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("SELECT nombre_sala FROM salas WHERE id_sala = %s", (id_sala,))
+            result = cursor.fetchone()
+            if result:
+                return result['nombre_sala']
+            return f"Sala {id_sala}"
+        except mysql.connector.Error as err:
+            return f"Sala {id_sala}"
+        finally:
+            if 'cursor' in locals():
+                cursor.close()
+            conn.close()
