@@ -56,7 +56,7 @@ class WebsocketController:
             # Si la sala queda vacía, la reseteamos por completo para que sea reutilizable
             if len(sala.jugadores) == 0:
                 sala.estado = "esperando"
-                sala.tiempo_restante = 300.0
+                sala.tiempo_restante = config.DURACION_PARTIDA
                 sala.dulces_centro = []
                 Database.actualizar_estado_sala(id_sala, 1) # esperando
                 print(f"Sala {id_sala} vacía. Reseteada a estado esperando.")

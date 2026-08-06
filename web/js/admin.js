@@ -1,8 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    conectarWS();
+    // Controladores de Vistas y Variables de Estado
+    let ws = null;
+    let canvasView = null;
+    let telemetryView = new TelemetryView();
+    let currentIdJugador = null;
+    let currentIdSala = null;
+    let username = '';
+    let globalRankingData = [];
+    let connectionLostAlerted = false;
 
     // Referencias a vistas
-
     const views = {
         'lobbies-view': document.getElementById('lobbies-view'),
         'game-view': document.getElementById('game-view'),
@@ -29,11 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    // Controladores de Vistas
-    let canvasView = null;
-    let telemetryView = new TelemetryView();
-    let ws = null;
     
     let currentIdJugador = null;
     let currentIdSala = null;
@@ -251,4 +253,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // Iniciar conexión WebSocket
+    conectarWS();
 });

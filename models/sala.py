@@ -11,7 +11,7 @@ class Sala:
         self.jugadores = {} # dict id_jugador -> objeto Jugador
         self.dulces_centro = [] # lista de dicts {'id': int, 'x': float, 'y': float}
         self._contador_dulces = 0
-        self.tiempo_restante = 300.0 # 5 minutos en segundos
+        self.tiempo_restante = config.DURACION_PARTIDA
         
     def agregar_jugador(self, jugador):
         if len(self.jugadores) >= config.MAX_JUGADORES_SALA:
@@ -113,7 +113,7 @@ class Sala:
                 j.dulces = 0
                 
         # Resetear el entorno para que la partida continúe
-        self.tiempo_restante = 300.0
+        self.tiempo_restante = config.DURACION_PARTIDA
         self.dulces_centro = []
         for _ in range(3):
             self._generar_dulce()
