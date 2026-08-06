@@ -35,7 +35,7 @@ class CanvasView {
         this.sprites.dulce1.src = 'assets/dulce1.png';
         this.sprites.dulce2.src = 'assets/dulce2.png';
         this.sprites.fondo.src = 'assets/fondo.png';
-        
+
         this.floatingTexts = [];
         this.prevSweets = {};
 
@@ -95,24 +95,24 @@ class CanvasView {
             if (h.estado_guardiana) {
                 const bx = h.base_x !== undefined ? h.base_x : h.x;
                 const by = h.base_y !== undefined ? h.base_y : h.y;
-                
+
                 const isCurrentPlayer = (window.currentIdJugador === h.id_jugador);
                 const spriteBase = isCurrentPlayer ? this.sprites.hormiguero_current : this.sprites.hormiguero;
-                
+
                 this.dibujarSprite(spriteBase, bx, by, 180, '#8D6238');
-                
+
                 // Mostrar dulces y procesar floating texts
                 const player = this.estado.ranking && this.estado.ranking.find(r => r.id_jugador === h.id_jugador);
                 if (player) {
                     const prevCount = this.prevSweets[h.id_jugador] || 0;
-                    
+
                     if (player.dulces > prevCount) {
-                        this.floatingTexts.push({text: '+1', x: bx, y: by - 10, alpha: 1.0, color: '74, 222, 128'});
+                        this.floatingTexts.push({ text: '+1', x: bx, y: by - 10, alpha: 1.0, color: '74, 222, 128' });
                     } else if (player.dulces < prevCount) {
-                        this.floatingTexts.push({text: '-1', x: bx, y: by - 10, alpha: 1.0, color: '239, 68, 68'});
+                        this.floatingTexts.push({ text: '-1', x: bx, y: by - 10, alpha: 1.0, color: '239, 68, 68' });
                     }
                     this.prevSweets[h.id_jugador] = player.dulces;
-                    
+
                     // Texto del contador
                     this.ctx.fillStyle = 'white';
                     this.ctx.font = 'bold 22px Arial';
@@ -131,25 +131,36 @@ class CanvasView {
             if (h.estado_guardiana) {
                 const img = h.estado_guardiana === 'despierta' ? this.sprites.guardiana_despierta : this.sprites.guardiana_dormida;
                 const color = h.estado_guardiana === 'despierta' ? '#EF4444' : '#9CA3AF';
-                this.dibujarSprite(img, h.x, h.y, 85, color);
+                this.dibujarSprite(img, h.x, h.y, 100, color);
             } else {
-                const color = h.estado === 'moviendo' ? '#3b82f6' : (h.estado === 'retorno' ? '#f59e0b' : '#1f2937');
+                const color = h.estado === 'moviendo' ? '#3b82f6' : (h.estado === 'retorno' ? '#f59e0b' : (h.estado === 'expulsada' ? '#ef4444' : '#1f2937'));
                 // Alternar sprites de hormiga para animación de caminata
                 const offset = (h.id_hormiga || 0) * 100;
                 const walkCycle = Math.floor((Date.now() + offset) / 150) % 2;
                 const antImg = walkCycle === 0 ? this.sprites.hormiga : this.sprites.hormiga2;
                 this.dibujarSprite(antImg, h.x, h.y, 35, color);
+
+                if (h.estado === 'expulsada') {
+                    // Texto flotante dinámico de patada sobre la hormiga que va saliendo volando
+                    this.ctx.fillStyle = '#ef4444';
+                    this.ctx.font = 'bold 13px Inter, sans-serif';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.shadowColor = 'black';
+                    this.ctx.shadowBlur = 4;
+                    this.ctx.fillText('PATADA', h.x, h.y - 25);
+                    this.ctx.shadowBlur = 0;
+                }
             }
         });
 
         // Dibujar dulces en el centro
         this.estado.dulces.forEach(d => {
-            const size = 30;
+            const size = 50;
             const spriteIndex = d.id % 3;
             const sprite = spriteIndex === 0 ? this.sprites.dulce : spriteIndex === 1 ? this.sprites.dulce1 : this.sprites.dulce2;
             this.dibujarSprite(sprite, d.x, d.y, size, '#FCA5A5');
         });
-        
+
         // Dibujar y animar textos flotantes
         for (let i = this.floatingTexts.length - 1; i >= 0; i--) {
             const ft = this.floatingTexts[i];

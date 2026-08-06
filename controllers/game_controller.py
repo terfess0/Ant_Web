@@ -78,10 +78,12 @@ class GameController:
                             guardiana_rival = rival.hormigas[0]
                             if guardiana_rival.estado_guardiana == "despierta":
                                 # Detectado por la guardiana
-                                h.estado = "expulsada" # El hilo de la hormiga la enviará a base
+                                h.estado = "expulsada" # El hilo de la hormiga saldrá volando hacia su base
+                                h.objetivo_x = h.base_x
+                                h.objetivo_y = h.base_y
                                 print(f"guardiana de {rival.username} expulsó a hormiga de {jugador.username}.")
                                 if notificar_callback:
-                                    notificar_callback(j_id, f"guardiana de {rival.username} te ha detectado y expulsado")
+                                    notificar_callback(j_id, f"💥 ¡Guardiana de {rival.username} expulsó a tu hormiga!")
                             elif guardiana_rival.estado_guardiana == "durmiendo" and rival.dulces > 0:
                                 # Robo exitoso
                                 rival.dulces -= 1

@@ -242,18 +242,4 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Ruta de Admin por URL
-    if (window.location.hash === '#telemetria' || window.location.search.includes('admin')) {
-        viewLogin.classList.add('hidden');
-        layoutMain.classList.remove('hidden');
-        
-        // Ocultar salas y mostrar telemetría
-        views['lobbies-view'].classList.add('hidden');
-        views['telemetry-view'].classList.remove('hidden');
-        
-        // Desactivar items activos en sidebar
-        navItems.forEach(n => n.classList.remove('active'));
-        
-        conectarWS();
-    }
 });

@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             else if (data.evento === "notificacion") {
                 if (data.id_jugador === currentIdJugador) {
-                    alert(data.mensaje); 
+                    console.log("💥 NOTIFICACIÓN:", data.mensaje);
                 }
             }
         };

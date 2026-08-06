@@ -33,17 +33,20 @@ class TelemetryController(threading.Thread):
                         for h in jugador.hormigas:
                             cargas.append(h.carga)
                             
+                # Sockets activos
+                ws_clients = len(self.ws_controller.clientes) if self.ws_controller else 0
+
                 telemetria_data = {
                     "evento": "telemetria",
                     "cpu": cpu,
                     "ram_mb": ram_mb,
                     "hilos_activos": hilos_activos,
-                    "hilos_hormiga_cargas": cargas
+                    "hilos_hormiga_cargas": cargas,
+                    "ws_clients": ws_clients
                 }
                 
-                # Imprimir en consola como dashboard ASCII (requisito 3.4)
-                # print(f"\r[Dashboard] CPU: {cpu}% | RAM: {ram_mb}MB | Hilos Nativos: {hilos_activos}   ", end="")
-                # sys.stdout.flush()
+                # Imprimir en consola constantemente para monitoreo
+                print(f"Telemetria - CPU: {cpu:.1f}% | RAM: {ram_mb}MB | Hilos: {hilos_activos} | WS Clientes: {ws_clients}")
                 
                 # Broadcast vía Websocket
                 if self.ws_controller and self.ws_controller.loop:

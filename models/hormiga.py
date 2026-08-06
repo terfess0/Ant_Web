@@ -46,8 +46,11 @@ class Hormiga(threading.Thread):
         self._tiempo_cambio_estado = time.time()
         self.estado_guardiana = "despierta" if self.es_guardiana else None
 
-    def calcular_trayectoria(self):
+    def calcular_trayectoria(self, vel=None):
         """Mueve la hormiga hacia el objetivo y retorna True si ha llegado"""
+        if vel is None:
+            vel = config.VELOCIDAD_MOVIMIENTO
+
         if self.objetivo_x is None or self.objetivo_y is None:
             return True
             
@@ -55,13 +58,13 @@ class Hormiga(threading.Thread):
         dy = self.objetivo_y - self.y
         distancia = math.hypot(dx, dy)
         
-        if distancia <= config.VELOCIDAD_MOVIMIENTO:
+        if distancia <= vel:
             self.x = self.objetivo_x
             self.y = self.objetivo_y
             return True
             
-        self.x += (dx / distancia) * config.VELOCIDAD_MOVIMIENTO
-        self.y += (dy / distancia) * config.VELOCIDAD_MOVIMIENTO
+        self.x += (dx / distancia) * vel
+        self.y += (dy / distancia) * vel
         return False
 
     def procesar_guardiana(self):
@@ -104,11 +107,14 @@ class Hormiga(threading.Thread):
                 
                 elif self.estado == "expulsada":
                     self.carga = 95
-                    # Teletransporte inmediato a base y volver a patrulla (simulado con breve delay)
-                    self.x = self.base_x
-                    self.y = self.base_y
-                    time.sleep(0.5)
-                    self.estado = "patrulla"
+                    self.objetivo_x = self.base_x
+                    self.objetivo_y = self.base_y
+                    # Velocidad ultra rápida hacia su hormiguero (efecto patada salir volando)
+                    llegado = self.calcular_trayectoria(vel=32.0)
+                    if llegado:
+                        self.estado = "patrulla"
+                        self.objetivo_x = None
+                        self.objetivo_y = None
 
             # Tick rate de 20 Hz
             time.sleep(config.TICK_RATE_HORMIGA)
