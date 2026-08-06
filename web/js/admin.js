@@ -133,8 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (filtered.length > 0) {
             const r1 = filtered[0];
-            podiumHtml += `<div class="podium-box rank-1" style="position:relative;">
-                <div style="position:absolute; top:-35px; font-size:2rem; animation: bounce 2s infinite;">🎊🏆🎊</div>
+            podiumHtml += `<div class="podium-box rank-1">
                 <h3>${r1.username}</h3><p>${r1.puntos} pts | 🍬 ${r1.dulces}</p><span style="font-size: 0.7rem; color: #6b7280; margin-top: 5px;">${r1.ultima_sala || 'Sin sala'}</span></div>`;
         }
         if (filtered.length > 2) {

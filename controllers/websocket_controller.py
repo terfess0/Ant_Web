@@ -16,12 +16,12 @@ class WebsocketController:
 
     async def register(self, websocket):
         self.clientes.add(websocket)
-        print(f"WS Connect: Nuevo cliente conectado. Total sockets activos: {len(self.clientes)}")
+        print(f"Connect: Nuevo cliente conectado. Total sockets activos: {len(self.clientes)}")
 
     async def unregister(self, websocket):
         if websocket in self.clientes:
             self.clientes.remove(websocket)
-            print(f"WS Disconnect: Cliente desconectado. Total sockets activos: {len(self.clientes)}")
+            print(f"Disconnect: Cliente desconectado. Total sockets activos: {len(self.clientes)}")
 
     async def broadcast(self, message):
         if self.clientes:
@@ -82,7 +82,7 @@ class WebsocketController:
                 accion = data.get("accion")
                 
                 if accion == "obtener_ranking_global":
-                    print("WS Action: Cliente consulto el Ranking Global.")
+                    print("Action: Cliente consulto el Ranking Global.")
                     ranking = Database.obtener_ranking_global()
                     await websocket.send(json.dumps({
                         "evento": "ranking_global",
@@ -120,7 +120,7 @@ class WebsocketController:
                             'jugadores': jugadores_nombres
                         })
                         
-                    print(f"WS Action: Cliente consulto lista de salas ({len(salas_info)} salas obtenidas).")
+                    print(f"Action: Cliente consulto lista de salas ({len(salas_info)} salas obtenidas).")
                     await websocket.send(json.dumps({
                         "evento": "lista_salas",
                         "salas": salas_info
@@ -128,7 +128,7 @@ class WebsocketController:
                     continue
                     
                 if accion == "limpiar_datos_db":
-                    print("WS Action: Solicitud de LIMPIEZA DE BASE DE DATOS ejecutada por Administrador.")
+                    print("Action: Solicitud de LIMPIEZA DE BASE DE DATOS ejecutada por Administrador.")
                     Database.limpiar_datos()
                     continue
                 
