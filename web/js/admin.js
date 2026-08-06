@@ -158,12 +158,18 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.innerHTML = tableHtml;
     }
 
+    let connectionLostAlerted = false;
+
     // WebSocket Logic
     function conectarWS() {
         ws = new WebSocket('ws://' + window.location.hostname + ':8765');
         
         ws.onopen = () => {
             console.log("WebSocket Conectado a 8765");
+            if (connectionLostAlerted) {
+                connectionLostAlerted = false;
+                console.log("Reconectado exitosamente con el servidor.");
+            }
             if (!views['lobbies-view'].classList.contains('hidden')) {
                 ws.send(JSON.stringify({ accion: "obtener_salas" }));
             }
@@ -236,6 +242,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         ws.onclose = () => {
+            if (!connectionLostAlerted) {
+                connectionLostAlerted = true;
+                alert("⚠️ Se ha perdido la conexión con el servidor. Intentando reconectar automáticamente...");
+            }
             console.log("WebSocket Desconectado. Reintentando en 3s...");
             setTimeout(conectarWS, 3000);
         };
