@@ -38,7 +38,7 @@
                 <a href="#" class="nav-item active" data-target="telemetry-view">
                     <span class="icon">⊞</span> Dashboard
                 </a>
-                <a href="#" class="nav-item" data-target="lobbies-view">
+                <a href="#" class="nav-item" data-target="view-ranking">
                     <span class="icon">🏆</span> Ranking
                 </a>
                 <a href="#" class="nav-item" data-target="lobbies-view">
@@ -209,6 +209,40 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- PANTALLA 5: Ranking Global -->
+            <div id="view-ranking" class="content-view hidden">
+                <header class="view-header">
+                    <div>
+                        <h1>Ranking Global</h1>
+                        <p>Los mejores comandantes de Ant Kingdom.</p>
+                    </div>
+                </header>
+                
+                <div class="search-container">
+                    <input type="text" id="search-ranking" placeholder="🔍 Buscar comandante...">
+                </div>
+
+                <div class="podium" id="ranking-podium">
+                    <!-- Podio inyectado por JS -->
+                </div>
+
+                <div class="global-ranking-table">
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>Posición</th>
+                                <th>Username</th>
+                                <th>Pts</th>
+                                <th>Dulces</th>
+                            </tr>
+                        </thead>
+                        <tbody id="global-ranking-body">
+                            <!-- Filas dinámicas -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 

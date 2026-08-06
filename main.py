@@ -32,8 +32,6 @@ async def main():
     
     # 3. (OPCIONAL/TEST) Crear una sala inicial para comprobar métricas
     sala_test = Sala(id_sala=1)
-    j1 = Jugador(1, "Jugador1", 100, 100)
-    sala_test.agregar_jugador(j1)
     sala_test.iniciar_partida()
     salas_activas[1] = sala_test
     

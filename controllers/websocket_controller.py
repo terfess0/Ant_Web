@@ -2,6 +2,10 @@ import asyncio
 import json
 import websockets
 from controllers.game_controller import GameController
+from models.database import Database
+from models.jugador import Jugador
+from models.hormiga import Hormiga
+import random
 
 class WebsocketController:
     def __init__(self, get_sala_por_id_func):
@@ -42,6 +46,14 @@ class WebsocketController:
                 data = json.loads(message)
                 accion = data.get("accion")
                 
+                if accion == "obtener_ranking_global":
+                    ranking = Database.obtener_ranking_global()
+                    await websocket.send(json.dumps({
+                        "evento": "ranking_global",
+                        "ranking": ranking
+                    }))
+                    continue
+                
                 # Asumimos que el cliente envía en qué sala está
                 id_sala = data.get("id_sala", 1)
                 sala = self.get_sala_por_id(id_sala)
@@ -49,7 +61,30 @@ class WebsocketController:
                 if sala is None:
                     continue
                     
-                if accion == "clic_mapa":
+                if accion == "unirse_sala":
+                    username = data.get("username")
+                    if not username: username = "Anónimo"
+                    
+                    # Registrar o mockear ID
+                    id_jugador = Database.registrar_jugador(username) 
+                    if not id_jugador:
+                        id_jugador = hash(username) % 10000
+                        
+                    if id_jugador not in sala.jugadores:
+                        j = Jugador(id_jugador, username, random.randint(100, 700), random.randint(100, 500))
+                        if sala.agregar_jugador(j) and sala.estado == "en_juego":
+                            for i in range(5):
+                                h = Hormiga(id_hormiga=i, id_jugador=id_jugador, start_x=j.base_x, start_y=j.base_y)
+                                j.hormigas.append(h)
+                                h.start()
+                                
+                    await websocket.send(json.dumps({
+                        "evento": "unirse_sala_ok",
+                        "id_jugador": id_jugador,
+                        "id_sala": id_sala
+                    }))
+                    
+                elif accion == "clic_mapa":
                     id_jugador = data.get("id_jugador")
                     x = data.get("pos_x")
                     y = data.get("pos_y")

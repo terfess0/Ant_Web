@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const views = {
         'lobbies-view': document.getElementById('lobbies-view'),
         'game-view': document.getElementById('game-view'),
-        'telemetry-view': document.getElementById('telemetry-view')
+        'telemetry-view': document.getElementById('telemetry-view'),
+        'view-ranking': document.getElementById('view-ranking')
     };
     
     // Navegación Sidebar
@@ -20,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = item.getAttribute('data-target');
             Object.values(views).forEach(v => v.classList.add('hidden'));
             views[target].classList.remove('hidden');
+            
+            if (target === 'view-ranking' && ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ accion: "obtener_ranking_global" }));
+            }
         });
     });
 
@@ -28,9 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let telemetryView = new TelemetryView();
     let ws = null;
     
-    let currentIdJugador = 1; // Ajustado para testear con la sala de main.py
+    let currentIdJugador = null;
     let currentIdSala = null;
     let username = '';
+    
+    let globalRankingData = [];
 
     // Flujo de Login
     document.getElementById('btn-login').addEventListener('click', () => {
@@ -53,25 +60,15 @@ document.addEventListener('DOMContentLoaded', () => {
     joinBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             currentIdSala = parseInt(btn.getAttribute('data-sala'));
-            document.getElementById('game-room-name').innerText = "Hormiguero Alfa (Sala 1 Test)"; // Hardcode por ahora
+            const roomName = btn.previousElementSibling.previousElementSibling.innerText;
+            document.getElementById('game-room-name').innerText = roomName;
             
-            // Navegación
-            Object.values(views).forEach(v => v.classList.add('hidden'));
-            views['game-view'].classList.remove('hidden');
-            
-            // Iniciar Canvas
-            if (!canvasView) {
-                canvasView = new CanvasView('game-canvas', (x, y) => {
-                    if(ws && ws.readyState === WebSocket.OPEN) {
-                        ws.send(JSON.stringify({
-                            accion: "clic_mapa",
-                            id_sala: currentIdSala,
-                            id_jugador: currentIdJugador,
-                            pos_x: x,
-                            pos_y: y
-                        }));
-                    }
-                });
+            if(ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    accion: "unirse_sala",
+                    username: username,
+                    id_sala: currentIdSala
+                }));
             }
         });
     });
@@ -90,6 +87,45 @@ document.addEventListener('DOMContentLoaded', () => {
         rankingBody.innerHTML = html;
     }
 
+    // Lógica Global Ranking
+    const searchInput = document.getElementById('search-ranking');
+    searchInput.addEventListener('input', () => {
+        renderGlobalRanking(globalRankingData);
+    });
+
+    function renderGlobalRanking(data) {
+        const filter = searchInput.value.toLowerCase();
+        const filtered = data.filter(r => r.username.toLowerCase().includes(filter));
+        
+        const podiumEl = document.getElementById('ranking-podium');
+        const tableBody = document.getElementById('global-ranking-body');
+        
+        // Render Podio (solo los top 3 originales, independientemente del filtro, a menos que el filtro los excluya, 
+        // pero usualmente el podio es fijo o filtrado. Lo haremos dinámico sobre el original para mantener el top 3)
+        // Para simplificar: el podio muestra los top 3 del resultado filtrado
+        
+        let podiumHtml = '';
+        if (filtered.length > 1) podiumHtml += `<div class="podium-box rank-2"><h3>${filtered[1].username}</h3><p>${filtered[1].puntos} pts</p></div>`;
+        if (filtered.length > 0) podiumHtml += `<div class="podium-box rank-1"><h3>${filtered[0].username}</h3><p>${filtered[0].puntos} pts</p></div>`;
+        if (filtered.length > 2) podiumHtml += `<div class="podium-box rank-3"><h3>${filtered[2].username}</h3><p>${filtered[2].puntos} pts</p></div>`;
+        podiumEl.innerHTML = podiumHtml;
+        
+        // Render Tabla (4 en adelante del filtrado)
+        let tableHtml = '';
+        for (let i = 3; i < filtered.length; i++) {
+            const r = filtered[i];
+            // Encontrar la posición real original
+            const originalIndex = data.findIndex(orig => orig.username === r.username) + 1;
+            tableHtml += `<tr>
+                <td>#${originalIndex}</td>
+                <td>${r.username}</td>
+                <td class="pts">${r.puntos}</td>
+                <td>${r.dulces}</td>
+            </tr>`;
+        }
+        tableBody.innerHTML = tableHtml;
+    }
+
     // WebSocket Logic
     function conectarWS() {
         ws = new WebSocket('ws://' + window.location.hostname + ':8765');
@@ -101,7 +137,30 @@ document.addEventListener('DOMContentLoaded', () => {
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data);
             
-            if (data.evento === "telemetria") {
+            if (data.evento === "unirse_sala_ok") {
+                currentIdJugador = data.id_jugador;
+                Object.values(views).forEach(v => v.classList.add('hidden'));
+                views['game-view'].classList.remove('hidden');
+                
+                if (!canvasView) {
+                    canvasView = new CanvasView('game-canvas', (x, y) => {
+                        if(ws && ws.readyState === WebSocket.OPEN && currentIdJugador) {
+                            ws.send(JSON.stringify({
+                                accion: "clic_mapa",
+                                id_sala: currentIdSala,
+                                id_jugador: currentIdJugador,
+                                pos_x: x,
+                                pos_y: y
+                            }));
+                        }
+                    });
+                }
+            }
+            else if (data.evento === "ranking_global") {
+                globalRankingData = data.ranking;
+                renderGlobalRanking(globalRankingData);
+            }
+            else if (data.evento === "telemetria") {
                 telemetryView.actualizar(data);
             } 
             else if (data.evento === "estado_sala") {
