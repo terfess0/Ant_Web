@@ -1,0 +1,766 @@
+--- Inicializando Servidor Hormigueros ---
+Conexión al pool de base de datos exitosa.
+Servidor HTTP (Estáticos) iniciado en http://localhost:8080
+Traceback (most recent call last):
+  File "C:\Users\santi\Desktop\exis\main.py", line 70, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\santi\anaconda3\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\santi\anaconda3\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\santi\anaconda3\Lib\asyncio\base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\santi\Desktop\exis\main.py", line 64, in main
+    await ws_controller.start_server(get_todas_salas)
+  File "C:\Users\santi\Desktop\exis\controllers\websocket_controller.py", line 120, in start_server
+    async with websockets.serve(self.handler, "0.0.0.0", 8765):
+               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\santi\anaconda3\Lib\site-packages\websockets\asyncio\server.py", line 462, in __aenter__
+    return await self
+           ^^^^^^^^^^
+  File "C:\Users\santi\anaconda3\Lib\site-packages\websockets\asyncio\server.py", line 451, in _await
+    self.server = await self.create_server()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\santi\anaconda3\Lib\site-packages\websockets\asyncio\server.py", line 672, in create_server
+    return await loop.create_server(protocol_factory, host, port, **kwargs)  # type: ignore[arg-type]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\santi\anaconda3\Lib\asyncio\base_events.py", line 1630, in create_server
+    raise OSError(err.errno, msg) from None
+OSError: [Errno 10048] error while attempting to bind on address ('0.0.0.0', 8765): [winerror 10048] solo se permite un uso de cada dirección de socket (protocolo/dirección de red/puerto)
+C:\Users\santi\Desktop\exis\controllers\telemetry_controller.py:55: RuntimeWarning: coroutine 'WebsocketController.broadcast' was never awaited
+  print(f"\nError en telemetría: {e}")
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed
+
+Error en telemetría: Event loop is closed

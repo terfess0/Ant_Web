@@ -1,4 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Generador de nombres aleatorios
+    const palabrasAleatorias = ["unitropico", "numeros", "random", "chigui", "galipiar", "gavan", "oso", "rey", "princesa"];
+    const inputUsername = document.getElementById('username-input');
+    const btnRandomName = document.getElementById('btn-random-name');
+
+    function generarNombreAzar() {
+        const palabra = palabrasAleatorias[Math.floor(Math.random() * palabrasAleatorias.length)];
+        const numAleatorio = Math.floor(Math.random() * 9999) + 1;
+        inputUsername.value = palabra + numAleatorio;
+    }
+
+    if (inputUsername && btnRandomName) {
+        generarNombreAzar();
+        btnRandomName.addEventListener('click', generarNombreAzar);
+    }
+
     // Referencias a vistas
     const viewLogin = document.getElementById('login-view');
     const layoutMain = document.getElementById('main-layout');
