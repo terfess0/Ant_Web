@@ -1,5 +1,6 @@
 import math
 import config
+from models.database import Database
 
 class GameController:
     @staticmethod
@@ -64,6 +65,7 @@ class GameController:
                         h.lleva_dulce = True
                         sala.reponer_dulces()
                         print(f"{jugador.username} ganó un dulce.")
+                        Database.incrementar_estadisticas_jugador(jugador.id_jugador, config.PUNTOS_RECOLECCION, 1)
                         continue
                         
                     # 2. Comprobar intento de robo
@@ -87,6 +89,7 @@ class GameController:
                                 jugador.puntos += config.PUNTOS_ROBO
                                 h.lleva_dulce = True
                                 print(f"{jugador.username} robó un dulce a {rival.username}.")
+                                Database.incrementar_estadisticas_jugador(jugador.id_jugador, config.PUNTOS_ROBO, 1)
                                 
                 # Resetear la bandera cuando vuelve a patrulla
                 if h.estado == 'patrulla' and getattr(h, 'accion_procesada', False):

@@ -152,3 +152,23 @@ class Database:
             if 'cursor' in locals():
                 cursor.close()
             conn.close()
+
+    @classmethod
+    def incrementar_estadisticas_jugador(cls, id_jugador, puntos, dulces):
+        conn = cls.get_connection()
+        if not conn: return
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE estadisticas_jugador 
+                SET puntos_totales = puntos_totales + %s, 
+                    dulces_totales = dulces_totales + %s 
+                WHERE id_jugador = %s
+            """, (puntos, dulces, id_jugador))
+            conn.commit()
+        except mysql.connector.Error as err:
+            print(f"Error al incrementar estadisticas de jugador: {err}")
+        finally:
+            if 'cursor' in locals():
+                cursor.close()
+            conn.close()
