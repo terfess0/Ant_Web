@@ -68,13 +68,14 @@ class WebsocketController:
                         
                         if sala_memoria:
                             jugadores_nombres = [j.username for j in sala_memoria.jugadores.values()]
-                            if sala_memoria.estado == 'esperando': estado_actual = 'En Espera'
-                            elif sala_memoria.estado == 'en_juego': estado_actual = 'En Juego'
-                            elif sala_memoria.estado == 'finalizada': estado_actual = 'Cerrada'
+                            estado_actual = s_db['estado']
                         else:
-                            if estado_actual.lower() == 'esperando': estado_actual = 'En Espera'
-                            elif estado_actual.lower() == 'en_juego': estado_actual = 'En Juego'
-                            elif estado_actual.lower() == 'finalizada': estado_actual = 'Cerrada'
+                            estado_actual = s_db['estado']
+                            
+                        if estado_actual.lower() == 'esperando': estado_actual = 'En Espera'
+                        elif estado_actual.lower() == 'en_juego': estado_actual = 'En Juego'
+                        elif estado_actual.lower() == 'finalizada': estado_actual = 'Cerrada'
+                        elif estado_actual.lower() == 'llena': estado_actual = 'Sala Llena'
                                 
                         salas_info.append({
                             'id_sala': s_db['id_sala'],

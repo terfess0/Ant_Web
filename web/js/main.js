@@ -193,12 +193,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         const bgClass = bgs[index % bgs.length];
                         const count = sala.cantidad_jugadores;
                         const full = count >= 5;
-                        const inGame = sala.estado === 'En Juego' || sala.estado === 'Cerrada';
-                        const disabled = full || inGame;
                         
                         let btnText = "Unirse a Sala";
-                        if (inGame) btnText = "Cerrada";
-                        else if (full) btnText = "Sala Llena";
+                        let disabled = false;
+                        
+                        if (sala.estado === 'Sala Llena' || full) {
+                            btnText = "Sala Llena";
+                            disabled = true;
+                        } else if (sala.estado === 'Cerrada') {
+                            btnText = "Cerrada";
+                            disabled = true;
+                        }
                         
                         let usersTitle = sala.jugadores && sala.jugadores.length > 0 ? "Jugadores: " + sala.jugadores.join(", ") : "Sin jugadores";
 

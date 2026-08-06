@@ -18,6 +18,10 @@ class Sala:
         if jugador.id_jugador in self.jugadores:
             return False
         self.jugadores[jugador.id_jugador] = jugador
+        
+        if len(self.jugadores) == config.MAX_JUGADORES_SALA:
+            Database.actualizar_estado_sala(self.id_sala, 4)
+            
         return True
         
     def iniciar_partida(self):

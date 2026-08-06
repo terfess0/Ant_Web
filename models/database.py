@@ -117,3 +117,20 @@ class Database:
             if 'cursor' in locals():
                 cursor.close()
             conn.close()
+
+    @classmethod
+    def actualizar_estado_sala(cls, id_sala, id_estado_sala):
+        conn = cls.get_connection()
+        if not conn: return False
+        try:
+            cursor = conn.cursor()
+            cursor.execute("UPDATE salas SET id_estado_sala = %s WHERE id_sala = %s", (id_estado_sala, id_sala))
+            conn.commit()
+            return True
+        except mysql.connector.Error as err:
+            print(f"Error al actualizar estado de sala: {err}")
+            return False
+        finally:
+            if 'cursor' in locals():
+                cursor.close()
+            conn.close()
