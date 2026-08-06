@@ -124,7 +124,12 @@ class Sala:
         todas_hormigas = []
         ranking = []
         for j in self.jugadores.values():
-            ranking.append({"username": j.username, "puntos": j.puntos, "dulces": j.dulces})
+            ranking.append({
+                "id_jugador": j.id_jugador,
+                "username": j.username, 
+                "puntos": j.puntos, 
+                "dulces": j.dulces
+            })
             for h in j.hormigas:
                 todas_hormigas.append(h.to_dict())
                 

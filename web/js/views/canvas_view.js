@@ -60,7 +60,7 @@ class CanvasView {
     actualizarEstado(nuevoEstado) {
         this.estado.dulces = nuevoEstado.dulces || [];
         this.estado.hormigas = nuevoEstado.hormigas || [];
-        this.estado.jugadores = nuevoEstado.jugadores || {};
+        this.estado.ranking = nuevoEstado.ranking || [];
     }
 
     dibujarSprite(img, x, y, size, fallbackColor) {
@@ -102,8 +102,8 @@ class CanvasView {
                 this.dibujarSprite(spriteBase, bx, by, 180, '#8D6238');
                 
                 // Mostrar dulces y procesar floating texts
-                if (this.estado.jugadores && this.estado.jugadores[h.id_jugador]) {
-                    const player = this.estado.jugadores[h.id_jugador];
+                const player = this.estado.ranking && this.estado.ranking.find(r => r.id_jugador === h.id_jugador);
+                if (player) {
                     const prevCount = this.prevSweets[h.id_jugador] || 0;
                     
                     if (player.dulces > prevCount) {
