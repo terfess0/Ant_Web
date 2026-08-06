@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
         viewLogin.classList.add('hidden');
         layoutMain.classList.remove('hidden');
         
-        // Ir a la vista principal (Dashboard/Telemetry por defecto)
-        views['telemetry-view'].classList.remove('hidden');
+        // Ir a la vista principal (Salas/Lobbies por defecto)
+        views['lobbies-view'].classList.remove('hidden');
         
         // Conectar WebSocket
         conectarWS();
@@ -153,6 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         ws.onopen = () => {
             console.log("WebSocket Conectado a 8765");
+            if (!views['lobbies-view'].classList.contains('hidden')) {
+                ws.send(JSON.stringify({ accion: "obtener_salas" }));
+            }
         };
         
         ws.onmessage = (e) => {
@@ -238,5 +241,20 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("WebSocket Desconectado. Reintentando en 3s...");
             setTimeout(conectarWS, 3000);
         };
+    }
+
+    // Ruta de Admin por URL
+    if (window.location.hash === '#telemetria' || window.location.search.includes('admin')) {
+        viewLogin.classList.add('hidden');
+        layoutMain.classList.remove('hidden');
+        
+        // Ocultar salas y mostrar telemetría
+        views['lobbies-view'].classList.add('hidden');
+        views['telemetry-view'].classList.remove('hidden');
+        
+        // Desactivar items activos en sidebar
+        navItems.forEach(n => n.classList.remove('active'));
+        
+        conectarWS();
     }
 });
