@@ -12,7 +12,7 @@
 ## 🌟 Características Principales
 
 - 🐜 **Simulación Multihilo Concurrente:** Cada hormiga en el mapa es alimentada por un hilo nativo e independiente (`threading.Thread`) en el servidor.
-- ⏱️ **Partidas Rápidas en Tiempo Real:** Temporizador configurado a 1 minuto por partida con respawn dinámico de dulces y detección de guardianas.
+- ⏱️ **Partidas Rápidas en Tiempo Real:** Temporizador configurado sin límite por partida con respawn dinámico de dulces y detección de guardianas.
 - 💥 **Físicas y Animaciones de Patada:** Cuando una hormiga guardiana despierta detecta a un invasor, la hormiga sale disparada a ultra velocidad de regreso a su hormiguero con efectos visuales dinámicos.
 - 🔊 **Sintetizador de Audio Integrado (Web Audio API):** Generación de efectos de sonido retro en tiempo real (patadas, recolección y aparición de dulces) sin depender de archivos de audio externos.
 - 📊 **Telemetry Deck & Modo Espectador (`/admin`):** Panel completo de diagnósticos en tiempo real que monitorea el uso de CPU, Memoria RAM y cargas del procesador mediante un ecualizador visual de hilos, junto con un visor de partidas para espectar salas activas.

@@ -17,7 +17,7 @@ El sistema utiliza el patrón **Model-View-Controller (MVC)** adaptado a un ento
 
 ### 🐍 Backend (Python)
 - **`models/hormiga.py`**: **EL CORAZÓN DEL MULTIHILO.** Cada hormiga hereda de `threading.Thread`. Esto significa que cada hormiga en el mapa es un hilo nativo del sistema operativo ejecutándose de forma independiente.
-- **`models/sala.py`**: Administra la partida, el temporizador (1 minuto), el estado de los dulces y el ranking interno.
+- **`models/sala.py`**: Administra la partida, el temporizador (sin límite), el estado de los dulces y el ranking interno.
 - **`models/database.py`**: Maneja la persistencia en **MySQL** utilizando un **Pool de Conexiones (`mysql.connector.pooling`)**, optimizando la reutilización de conexiones y evitando cuellos de botella al escribir puntajes.
 - **`controllers/game_controller.py`**: Procesa la física de juego, detección de colisiones, robos y la patada de las guardianas.
 - **`controllers/websocket_controller.py`**: Utiliza `asyncio` y `websockets` (puerto 8765) para transmitir el estado del juego a 10 Hz (cada 100ms) a todos los clientes.

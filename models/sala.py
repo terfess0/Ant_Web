@@ -67,14 +67,17 @@ class Sala:
         if self.estado != "en_juego":
             return False, None
             
-        self.tiempo_restante -= 0.1
-        if self.tiempo_restante <= 0:
-            self.tiempo_restante = 0
-            ganador_info = self.finalizar_partida()
-            return True, ganador_info
+        if self.tiempo_restante is not None and not math.isinf(self.tiempo_restante):
+            self.tiempo_restante -= 0.1
+            if self.tiempo_restante <= 0:
+                self.tiempo_restante = 0
+                ganador_info = self.finalizar_partida()
+                return True, ganador_info
         return False, None
 
     def get_tiempo_formateado(self):
+        if self.tiempo_restante is None or math.isinf(self.tiempo_restante):
+            return "Sin límite"
         minutos = int(self.tiempo_restante) // 60
         segundos = int(self.tiempo_restante) % 60
         return f"{minutos:02d}:{segundos:02d}"

@@ -9,7 +9,7 @@ PUNTOS_RECOLECCION = 10
 PUNTOS_ROBO = 5
 
 # Tiempos (en segundos)
-DURACION_PARTIDA = 60.0  # 1 minuto por partida
+DURACION_PARTIDA = float('inf')  # Sin límite por partida
 TICK_RATE_HORMIGA = 0.05
 TIEMPO_GUARDIANA_DESPIERTA = 10
 TIEMPO_GUARDIANA_DORMIDA = 5
