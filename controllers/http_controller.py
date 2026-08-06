@@ -24,6 +24,11 @@ class HttpController(threading.Thread):
                 # Silenciar logs para no saturar consola
                 pass
                 
+            def do_GET(self):
+                if self.path == '/admin' or self.path == '/admin/':
+                    self.path = '/admin.html'
+                return super().do_GET()
+                
         try:
             # Permitir reusar dirección
             socketserver.TCPServer.allow_reuse_address = True

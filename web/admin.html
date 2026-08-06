@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ant Kingdom - Proyecto Hormigueros</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ESTRUCTURA PRINCIPAL ADMIN -->
+    <div id="main-layout" class="view-container active">
+        <!-- Sidebar Izquierdo -->
+        <aside class="sidebar">
+            <div class="sidebar-logo" style="font-size: 0.95rem; font-weight: 800; display: flex; align-items: center; gap: 8px; color: var(--brown-primary); border-bottom: 1px solid var(--border-color); padding: 20px;">
+                <span>🐜</span> Proyecto: Ant Kingdom
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-target="telemetry-view">
+                    Telemetría
+                </a>
+                <a href="#" class="nav-item" data-target="lobbies-view">
+                    Salas (Espectar)
+                </a>
+                <a href="#" class="nav-item" data-target="view-ranking">
+                    Ranking Global
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>Votar por este proyecto</p>
+                <div class="qr-code">
+                    <img src="assets/qr.png" alt="QR Code" style="width: 100px; height: 100px; border-radius: 8px;">
+                </div>
+            </div>
+        </aside>
+
+        <!-- Contenido Central -->
+        <main class="main-content">
+            
+            <!-- PANTALLA 2: Lobbies -->
+            <div id="lobbies-view" class="content-view hidden">
+                <header class="view-header">
+                    <div>
+                        <h1>Active Lobbies</h1>
+                        <p>Select a deployment zone to join the swarm.</p>
+                    </div>
+                    <button class="btn-outline">↻ Refresh</button>
+                </header>
+                <div class="lobbies-grid" id="lobbies-grid-container">
+                    <!-- Salas generadas dinámicamente desde WS -->
+                </div>
+            </div>
+
+            <!-- PANTALLA 3: Vista de Juego -->
+            <div id="game-view" class="content-view hidden">
+                <header class="game-header">
+                    <h2>Proyecto: Ant Kingdom <span class="separator">|</span> <span id="game-room-name">Hormiguero Alfa</span></h2>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <button id="btn-leave-room" class="btn-outline" style="border-color: #ff4d4d; color: #ff4d4d;">Abandonar Sala</button>
+                        <div class="timer">⏱ <span id="game-timer">05:00</span></div>
+                    </div>
+                </header>
+                <div class="game-area">
+                    <canvas id="game-canvas" width="800" height="600"></canvas>
+                    <div class="colony-rankings">
+                        <h3>📊 Tabla de Puntuación</h3>
+                        <table class="ranking-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Pts</th>
+                                    <th>Dulces</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ranking-body">
+                                <!-- Filas dinámicas -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANTALLA 4: Telemetry Deck -->
+            <div id="telemetry-view" class="content-view">
+                <header class="view-header">
+                    <div>
+                        <h1>Telemetry Deck</h1>
+                        <p>System diagnostics and real-time metrics.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="btn-limpiar-datos" class="btn-outline" style="color: #ef4444; border-color: #ef4444;">🔥 Limpiar Datos</button>
+                        <button class="btn-outline">↻ Refresh</button>
+                    </div>
+                </header>
+                <div class="telemetry-grid">
+                    <!-- CPU -->
+                    <div class="tele-card">
+                        <div class="card-header">
+                            <span>CONSUMO DE CPU</span>
+                            <span class="status-stable">● Stable</span>
+                        </div>
+                        <div class="card-body">
+                            <h2 class="metric"><span id="metric-cpu">0</span><small>%</small></h2>
+                            <div class="progress-bar"><div id="bar-cpu" class="fill" style="width: 0%"></div></div>
+                            <p class="subtitle">psutil.cpu_percent() - Servidor Linux</p>
+                        </div>
+                    </div>
+                    <!-- RAM -->
+                    <div class="tele-card">
+                        <div class="card-header">
+                            <span>USO DE MEMORIA RAM</span>
+                            <span class="icon">📈</span>
+                        </div>
+                        <div class="card-body">
+                            <h2 class="metric"><span id="metric-ram">0</span> <small>MB</small></h2>
+                            <p class="small-text">/ 2048 MB total <span class="badge-outline" id="badge-ram">0%</span></p>
+                            <div class="progress-bar"><div id="bar-ram" class="fill brown" style="width: 0%"></div></div>
+                            <p class="subtitle">Linux Lite Kernel</p>
+                        </div>
+                    </div>
+                    <!-- RED -->
+                    <div class="tele-card">
+                        <div class="card-header">
+                            <span>CONEXIONES Y SOCKETS</span>
+                            <span class="badge-outline">WS_ACTIVE</span>
+                        </div>
+                        <div class="card-body align-center">
+                            <div class="network-circle">📡</div>
+                            <div class="network-info">
+                                <h3><span id="metric-ws">0</span> Clientes WebSockets</h3>
+                                <p>Conexión Establecida</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- HILOS Y ECUALIZADOR -->
+                    <div class="tele-card span-2">
+                        <div class="card-header">
+                            <span>HILOS NATIVOS ACTIVOS</span>
+                            <span class="icon">🎛</span>
+                        </div>
+                        <div class="card-body">
+                            <h2 class="metric"><span id="metric-threads">0</span> <small>total</small></h2>
+                            
+                            <div class="thread-breakdown">
+                                <!-- Leyendas de hilos fijos -->
+                                <div class="thread-row"><span>1 Hilo Principal (Sockets)</span> <span>1.7%</span></div>
+                                <div class="progress-bar thin"><div class="fill brown" style="width: 1.7%"></div></div>
+                                
+                                <div class="thread-row"><span>1 Hilo HTTP</span> <span>1.7%</span></div>
+                                <div class="progress-bar thin"><div class="fill brown" style="width: 1.7%"></div></div>
+                                
+                                <div class="thread-row"><span>1 Hilo Monitor</span> <span>1.7%</span></div>
+                                <div class="progress-bar thin"><div class="fill brown" style="width: 1.7%"></div></div>
+                                
+                                <div class="thread-row"><span>3 Hilos Generadores</span> <span>5.1%</span></div>
+                                <div class="progress-bar thin"><div class="fill brown" style="width: 5.1%"></div></div>
+                                
+                                <div class="thread-row"><span>Hilos de Hormigas Dinámicos</span> <span id="metric-ant-threads">0</span></div>
+                                
+                                <!-- ECUALIZADOR DE BARRAS VERTICALES -->
+                                <div id="thread-equalizer" class="equalizer-container">
+                                    <!-- Barras verticales inyectadas por JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANTALLA 5: Ranking Global -->
+            <div id="view-ranking" class="content-view hidden">
+                <header class="view-header">
+                    <div>
+                        <h1>Ranking Global</h1>
+                        <p>Los mejores comandantes de Ant Kingdom.</p>
+                    </div>
+                </header>
+                
+                <div class="search-container">
+                    <input type="text" id="search-ranking" placeholder="🔍 Buscar comandante...">
+                </div>
+
+                <div class="podium" id="ranking-podium">
+                    <!-- Podio inyectado por JS -->
+                </div>
+
+                <div class="global-ranking-table">
+                    <table class="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>Posición</th>
+                                <th>Username</th>
+                                <th>Pts</th>
+                                <th>Dulces</th>
+                            </tr>
+                        </thead>
+                        <tbody id="global-ranking-body">
+                            <!-- Filas dinámicas -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/views/canvas_view.js"></script>
+    <script src="js/views/telemetry_view.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-08-2026 a las 10:39:48
+-- Tiempo de generación: 06-08-2026 a las 11:51:25
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -35,37 +35,6 @@ CREATE TABLE `estadisticas_jugador` (
   `partidas_ganadas` int(11) DEFAULT 0,
   `fecha_ultima_partida` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `estadisticas_jugador`
---
-
-INSERT INTO `estadisticas_jugador` (`id_jugador`, `puntos_totales`, `dulces_totales`, `partidas_jugadas`, `partidas_ganadas`, `fecha_ultima_partida`) VALUES
-(1, 0, 0, 0, 0, '2026-08-05 22:46:31'),
-(2, 0, 0, 0, 0, '2026-08-05 22:53:17'),
-(3, 0, 0, 0, 0, '2026-08-05 23:13:10'),
-(4, 0, 0, 0, 0, '2026-08-05 23:35:16'),
-(6, 80, 8, 0, 0, '2026-08-05 23:46:16'),
-(10, 190, 19, 0, 0, '2026-08-06 00:41:54'),
-(11, 40, 4, 0, 0, '2026-08-06 01:22:46'),
-(12, 60, 6, 1, 1, '2026-08-06 01:27:43'),
-(13, 0, 0, 0, 0, '2026-08-06 01:35:14'),
-(14, 0, 0, 0, 0, '2026-08-06 01:36:33'),
-(15, 0, 0, 1, 1, '2026-08-06 02:32:00'),
-(16, 50, 5, 0, 0, '2026-08-06 02:35:28'),
-(17, 20, 2, 0, 0, '2026-08-06 02:37:01'),
-(18, 0, 0, 0, 0, '2026-08-06 02:40:05'),
-(19, 0, 0, 0, 0, '2026-08-06 02:40:11'),
-(20, 20, 2, 0, 0, '2026-08-06 02:41:47'),
-(21, 20, 2, 0, 0, '2026-08-06 02:42:52'),
-(22, 0, 0, 1, 1, '2026-08-06 02:45:53'),
-(25, 0, 0, 0, 0, '2026-08-06 02:47:34'),
-(26, 0, 0, 0, 0, '2026-08-06 02:49:20'),
-(27, 0, 0, 1, 1, '2026-08-06 02:55:07'),
-(28, 0, 0, 0, 0, '2026-08-06 03:00:47'),
-(29, 60, 6, 1, 1, '2026-08-06 03:11:23'),
-(30, 0, 0, 0, 0, '2026-08-06 03:11:48'),
-(33, 70, 7, 1, 1, '2026-08-06 03:33:07');
 
 -- --------------------------------------------------------
 
@@ -140,37 +109,6 @@ CREATE TABLE `jugadores` (
   `fecha_registro` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `jugadores`
---
-
-INSERT INTO `jugadores` (`id_jugador`, `nombre_usuario`, `fecha_registro`) VALUES
-(1, 'zxc', '2026-08-05 22:46:31'),
-(2, 'asdas', '2026-08-05 22:53:17'),
-(3, 'oso6285', '2026-08-05 23:13:10'),
-(4, 'gavan9', '2026-08-05 23:35:16'),
-(6, 'galipiar4377', '2026-08-05 23:44:14'),
-(10, 'numeros3460', '2026-08-05 23:50:19'),
-(11, 'chigui6425', '2026-08-06 01:22:28'),
-(12, 'gavan9938', '2026-08-06 01:24:43'),
-(13, 'chigui5370', '2026-08-06 01:35:14'),
-(14, 'oso4188', '2026-08-06 01:36:33'),
-(15, 'numeros3494', '2026-08-06 02:29:15'),
-(16, 'princesa5923', '2026-08-06 02:35:04'),
-(17, 'numeros3021', '2026-08-06 02:36:48'),
-(18, 'numeros8735', '2026-08-06 02:40:05'),
-(19, 'numeros1304', '2026-08-06 02:40:11'),
-(20, 'chigui2223', '2026-08-06 02:40:37'),
-(21, 'rey3129', '2026-08-06 02:42:32'),
-(22, 'gavan6737', '2026-08-06 02:43:37'),
-(25, 'unitropico2919', '2026-08-06 02:47:34'),
-(26, 'galipiar2546', '2026-08-06 02:49:20'),
-(27, 'galipiar7548', '2026-08-06 02:49:50'),
-(28, 'chigui6829', '2026-08-06 03:00:47'),
-(29, 'princesa3184', '2026-08-06 03:06:08'),
-(30, 'numeros2228', '2026-08-06 03:11:48'),
-(33, 'oso6254', '2026-08-06 03:25:30');
-
 -- --------------------------------------------------------
 
 --
@@ -186,18 +124,6 @@ CREATE TABLE `participaciones_partida` (
   `posicion_final` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `participaciones_partida`
---
-
-INSERT INTO `participaciones_partida` (`id_participacion`, `id_partida`, `id_jugador`, `puntos_partida`, `dulces_obtenidos`, `posicion_final`) VALUES
-(1, 1, 12, 60, 6, 1),
-(2, 2, 15, 0, 0, 1),
-(3, 3, 22, 0, 0, 1),
-(4, 4, 27, 0, 0, 1),
-(5, 5, 29, 60, 6, 1),
-(6, 6, 33, 20, 2, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -210,18 +136,6 @@ CREATE TABLE `partidas` (
   `fecha_inicio` datetime DEFAULT current_timestamp(),
   `fecha_fin` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `partidas`
---
-
-INSERT INTO `partidas` (`id_partida`, `id_sala`, `fecha_inicio`, `fecha_fin`) VALUES
-(1, 1, '2026-08-06 01:27:43', '2026-08-06 01:27:43'),
-(2, 1, '2026-08-06 02:32:00', '2026-08-06 02:32:00'),
-(3, 1, '2026-08-06 02:45:53', '2026-08-06 02:45:53'),
-(4, 1, '2026-08-06 02:55:07', '2026-08-06 02:55:07'),
-(5, 1, '2026-08-06 03:11:23', '2026-08-06 03:11:23'),
-(6, 1, '2026-08-06 03:33:07', '2026-08-06 03:33:07');
 
 -- --------------------------------------------------------
 
@@ -241,7 +155,17 @@ CREATE TABLE `salas` (
 --
 
 INSERT INTO `salas` (`id_sala`, `nombre_sala`, `id_estado_sala`, `fecha_creacion`) VALUES
-(1, 'Concentración de Reinos', 3, '2026-08-05 23:27:44');
+(1, 'Concentración de Reinos', 1, '2026-08-05 23:27:44'),
+(2, 'La Dulcería', 1, '2026-08-06 04:32:54'),
+(3, 'El Gran Hormiguero', 1, '2026-08-06 04:32:54'),
+(4, 'Camino de Azúcar', 1, '2026-08-06 04:32:54'),
+(5, 'Guerra de Reinas', 1, '2026-08-06 04:32:54'),
+(6, 'Túneles Oscuros', 1, '2026-08-06 04:32:54'),
+(7, 'Valle de las Migajas', 1, '2026-08-06 04:32:54'),
+(8, 'Montaña de Caramelo', 1, '2026-08-06 04:32:54'),
+(9, 'Jardín Prohibido', 1, '2026-08-06 04:32:54'),
+(10, 'El Imperio Subterráneo', 1, '2026-08-06 04:32:54'),
+(11, 'Fiebre del Azúcar', 1, '2026-08-06 04:32:54');
 
 --
 -- Índices para tablas volcadas
@@ -329,25 +253,25 @@ ALTER TABLE `estado_sala`
 -- AUTO_INCREMENT de la tabla `jugadores`
 --
 ALTER TABLE `jugadores`
-  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `participaciones_partida`
 --
 ALTER TABLE `participaciones_partida`
-  MODIFY `id_participacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_participacion` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `partidas`
 --
 ALTER TABLE `partidas`
-  MODIFY `id_partida` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_partida` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `salas`
 --
 ALTER TABLE `salas`
-  MODIFY `id_sala` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_sala` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Restricciones para tablas volcadas
