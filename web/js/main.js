@@ -135,9 +135,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Lógica Global Ranking
     const searchInput = document.getElementById('search-ranking');
-    searchInput.addEventListener('input', () => {
-        renderGlobalRanking(globalRankingData);
-    });
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            renderGlobalRanking(globalRankingData);
+        });
+    }
+
+    // Botón Limpiar Datos
+    const btnLimpiar = document.getElementById('btn-limpiar-datos');
+    if (btnLimpiar) {
+        btnLimpiar.addEventListener('click', () => {
+            if (confirm("¿Estás seguro de que deseas limpiar todos los jugadores y clasificaciones? Las salas NO se borrarán.")) {
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(JSON.stringify({ accion: "limpiar_datos_db" }));
+                    alert("Se ha enviado la orden para limpiar los datos.");
+                }
+            }
+        });
+    }
 
     function renderGlobalRanking(data) {
         const filter = searchInput.value.toLowerCase();
@@ -146,14 +161,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const podiumEl = document.getElementById('ranking-podium');
         const tableBody = document.getElementById('global-ranking-body');
         
-        // Render Podio (solo los top 3 originales, independientemente del filtro, a menos que el filtro los excluya, 
-        // pero usualmente el podio es fijo o filtrado. Lo haremos dinámico sobre el original para mantener el top 3)
-        // Para simplificar: el podio muestra los top 3 del resultado filtrado
-        
+        // Render Podio (Top 3)
         let podiumHtml = '';
-        if (filtered.length > 1) podiumHtml += `<div class="podium-box rank-2"><h3>${filtered[1].username}</h3><p>${filtered[1].puntos} pts</p></div>`;
-        if (filtered.length > 0) podiumHtml += `<div class="podium-box rank-1"><h3>${filtered[0].username}</h3><p>${filtered[0].puntos} pts</p></div>`;
-        if (filtered.length > 2) podiumHtml += `<div class="podium-box rank-3"><h3>${filtered[2].username}</h3><p>${filtered[2].puntos} pts</p></div>`;
+        if (filtered.length > 1) {
+            const r2 = filtered[1];
+            podiumHtml += `<div class="podium-box rank-2"><h3>${r2.username}</h3><p>${r2.puntos} pts | 🍬 ${r2.dulces}</p><span style="font-size: 0.7rem; color: #6b7280; margin-top: 5px;">${r2.ultima_sala || 'Sin sala'}</span></div>`;
+        }
+        if (filtered.length > 0) {
+            const r1 = filtered[0];
+            podiumHtml += `<div class="podium-box rank-1" style="position:relative;">
+                <div style="position:absolute; top:-35px; font-size:2rem; animation: bounce 2s infinite;">🎊🏆🎊</div>
+                <h3>${r1.username}</h3><p>${r1.puntos} pts | 🍬 ${r1.dulces}</p><span style="font-size: 0.7rem; color: #6b7280; margin-top: 5px;">${r1.ultima_sala || 'Sin sala'}</span></div>`;
+        }
+        if (filtered.length > 2) {
+            const r3 = filtered[2];
+            podiumHtml += `<div class="podium-box rank-3"><h3>${r3.username}</h3><p>${r3.puntos} pts | 🍬 ${r3.dulces}</p><span style="font-size: 0.7rem; color: #6b7280; margin-top: 5px;">${r3.ultima_sala || 'Sin sala'}</span></div>`;
+        }
         podiumEl.innerHTML = podiumHtml;
         
         // Render Tabla (4 en adelante del filtrado)

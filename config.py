@@ -33,6 +33,6 @@ CENTRO_Y = CANVAS_HEIGHT // 2
 # ==========================================
 DB_HOST = "localhost"
 DB_PORT = 3306
-DB_USER = "ant"
+DB_USER = "root"
 DB_PASSWORD = ""
 DB_NAME = "exis_ant"

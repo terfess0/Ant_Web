@@ -121,6 +121,10 @@ class WebsocketController:
                         "salas": salas_info
                     }))
                     continue
+                    
+                if accion == "limpiar_datos_db":
+                    Database.limpiar_datos()
+                    continue
                 
                 # Asumimos que el cliente envía en qué sala está
                 id_sala = data.get("id_sala", 1)

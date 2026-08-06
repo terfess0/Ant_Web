@@ -82,7 +82,13 @@ class Database:
             query = """
                 SELECT j.nombre_usuario as username, 
                        e.puntos_totales as puntos, 
-                       e.dulces_totales as dulces
+                       e.dulces_totales as dulces,
+                       (SELECT s.nombre_sala 
+                        FROM participaciones_partida pp 
+                        JOIN partidas p ON pp.id_partida = p.id_partida 
+                        JOIN salas s ON p.id_sala = s.id_sala 
+                        WHERE pp.id_jugador = j.id_jugador 
+                        ORDER BY p.fecha_fin DESC LIMIT 1) as ultima_sala
                 FROM estadisticas_jugador e
                 JOIN jugadores j ON e.id_jugador = j.id_jugador
                 ORDER BY e.puntos_totales DESC, e.dulces_totales DESC
@@ -209,3 +215,26 @@ class Database:
             if 'cursor' in locals():
                 cursor.close()
             conn.close()
+
+    @classmethod
+    def limpiar_datos(cls):
+        conn = cls.get_connection()
+        if not conn: return False
+        try:
+            cursor = conn.cursor()
+            cursor.execute('SET FOREIGN_KEY_CHECKS = 0')
+            cursor.execute('TRUNCATE TABLE participaciones_partida')
+            cursor.execute('TRUNCATE TABLE partidas')
+            cursor.execute('TRUNCATE TABLE estadisticas_jugador')
+            cursor.execute('TRUNCATE TABLE jugadores')
+            cursor.execute('SET FOREIGN_KEY_CHECKS = 1')
+            conn.commit()
+            return True
+        except Exception as err:
+            print(f'Error al limpiar datos: {err}')
+            return False
+        finally:
+            if 'cursor' in locals():
+                cursor.close()
+            conn.close()
+

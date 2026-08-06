@@ -23,7 +23,7 @@
                 </div>
                 <button id="btn-login" class="btn-brown">INGRESAR AL JUEGO ➔</button>
             </div>
-            <button class="btn-green">VOTAR POR ESTE PROYECTO</button>
+            <button class="btn-green" onclick="window.open('https://vota-exis.sistemasunitropico.com/', '_blank')">VOTAR POR ESTE PROYECTO</button>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
             <div class="sidebar-footer">
                 <p>Votar por este proyecto</p>
                 <div class="qr-code">
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZCIvPjwvc3ZnPg==" alt="QR Code">
+                    <img src="assets/qr.png" alt="QR Code" style="width: 100px; height: 100px; border-radius: 8px;">
                 </div>
             </div>
         </aside>
@@ -103,7 +103,10 @@
                         <h1>Telemetry Deck</h1>
                         <p>System diagnostics and real-time metrics.</p>
                     </div>
-                    <button class="btn-outline">↻ Refresh</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="btn-limpiar-datos" class="btn-outline" style="color: #ef4444; border-color: #ef4444;">🔥 Limpiar Datos</button>
+                        <button class="btn-outline">↻ Refresh</button>
+                    </div>
                 </header>
                 <div class="telemetry-grid">
                     <!-- CPU -->
